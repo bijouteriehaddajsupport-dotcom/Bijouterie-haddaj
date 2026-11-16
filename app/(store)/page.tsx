@@ -91,7 +91,7 @@ export default async function HomePage() {
                 Tout voir
               </Link>
             </div>
-            <ul className="scrollbar-none -mx-5 mt-8 flex gap-5 overflow-x-auto px-5 pb-2 md:mx-0 md:flex-wrap md:justify-start md:gap-8 md:px-0">
+            <ul className="scrollbar-none -mx-5 mt-8 flex gap-5 overflow-x-auto px-5 pb-2 md:mx-0 md:flex-wrap md:justify-center md:gap-10 md:px-0">
               {collections.map((c) => (
                 <li key={c.id} className="shrink-0">
                   <Link href={`/collections/${c.slug}`} className="group flex w-[104px] flex-col items-center text-center md:w-[132px]">
