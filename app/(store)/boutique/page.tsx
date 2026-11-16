@@ -64,7 +64,7 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
         </div>
       </section>
 
-      <div className="sticky top-16 z-20 border-b border-sable bg-white/95 backdrop-blur-md lg:top-[112px]">
+      <div className="sticky top-16 z-20 border-b border-sable bg-white/95 backdrop-blur-md">
         <div className="container flex items-center justify-between gap-6">
           <ul className="scrollbar-none -mx-1 flex flex-1 items-center gap-1 overflow-x-auto">
             <li>

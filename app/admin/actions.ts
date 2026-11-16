@@ -7,6 +7,7 @@ import { addDays, todayISO } from "@/lib/dates";
 import { sendDeliveryReminders } from "@/lib/deliveries";
 import { slugify } from "@/lib/format";
 import { getAdmin } from "@/lib/supabase/server";
+import { normalizeHomeImages } from "@/lib/site-images";
 import type { OrderStatus } from "@/lib/types";
 
 export type ActionState = { ok: boolean; message: string; fieldErrors?: Record<string, string> } | null;
@@ -26,6 +27,27 @@ const num = (fd: FormData, key: string) => {
 function refreshStore() {
   revalidateTag(CATALOG_TAG);
   revalidatePath("/", "layout");
+}
+
+// ------------------------------------------------------- Photos du site
+/** Enregistre les photos de l'accueil et leur cadrage (Admin → Photos du site). */
+export async function saveHomeImages(value: unknown) {
+  const supabase = await requireAdmin();
+  const clean = normalizeHomeImages(value);
+  const { error } = await supabase.from("site_settings").upsert({ key: "home_images", value: clean, updated_at: new Date().toISOString() });
+  if (error) {
+    if (/site_settings/.test(error.message)) return { ok: false, message: "Exécutez d'abord supabase/photos-site.sql dans Supabase (SQL Editor)." };
+    return { ok: false, message: error.message };
+  }
+  refreshStore();
+  return { ok: true, message: "Photos enregistrées : la boutique est à jour." };
+}
+
+/** Vide le cache de la boutique (utile après une modification faite directement dans Supabase). */
+export async function refreshStoreNow() {
+  await requireAdmin();
+  refreshStore();
+  return { ok: true, message: "Boutique actualisée." };
 }
 
 // ------------------------------------------------------------------ Produits

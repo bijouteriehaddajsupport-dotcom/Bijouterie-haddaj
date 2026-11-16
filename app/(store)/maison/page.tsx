@@ -5,7 +5,9 @@ import Link from "next/link";
 import { LogoFull } from "@/components/ui/Logo";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { WhatsAppIcon } from "@/components/ui/SocialIcons";
-import { EDITORIAL_IMAGES, SOCIAL_LINKS, STORE } from "@/lib/constants";
+import { SOCIAL_LINKS, STORE } from "@/lib/constants";
+import { getHomeImages } from "@/lib/data";
+import { focus } from "@/lib/site-images";
 
 export const metadata: Metadata = {
   title: "Notre boutique",
@@ -21,7 +23,10 @@ const SERVICES = [
   { icon: Phone, title: "Commande par téléphone", text: `Appelez ${STORE.contactName} au ${STORE.phone} pour commander.` },
 ];
 
-export default function MaisonPage() {
+export const revalidate = 3600;
+
+export default async function MaisonPage() {
+  const { editorial } = await getHomeImages();
   const whatsapp = SOCIAL_LINKS.find((s) => s.icon === "whatsapp")?.href;
   return (
     <>
@@ -49,7 +54,7 @@ export default function MaisonPage() {
         </Reveal>
         <Reveal delay={0.1} className="relative">
           <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-bordeaux-50">
-            <Image src={EDITORIAL_IMAGES.editorial} alt="Bijou en or porté" fill priority sizes="(min-width:1024px) 50vw, 100vw" className="object-cover" />
+            <Image src={editorial.url} alt="Bijou en or porté" fill priority sizes="(min-width:1024px) 50vw, 100vw" className="object-cover" style={{ objectPosition: focus(editorial) }} />
           </div>
           <div className="absolute -bottom-6 left-6 rounded-2xl bg-white p-4 shadow-xl shadow-black/10">
             <LogoFull className="w-[84px]" />

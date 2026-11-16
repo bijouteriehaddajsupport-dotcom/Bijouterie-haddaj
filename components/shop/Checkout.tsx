@@ -262,7 +262,7 @@ export function Checkout() {
 
       {/* Récapitulatif */}
       <aside className="min-w-0 lg:col-span-5">
-        <div className="bg-ivoire p-6 md:p-8 lg:sticky lg:top-[136px]">
+        <div className="bg-ivoire p-6 md:p-8 lg:sticky lg:top-24">
           <h2 className="font-serif text-[28px] text-bordeaux-900">Récapitulatif</h2>
           <dl className="mt-6 space-y-3 text-[14px]">
             <div className="flex justify-between">

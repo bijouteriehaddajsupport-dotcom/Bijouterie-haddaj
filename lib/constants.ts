@@ -20,8 +20,8 @@ export const EDITORIAL_IMAGES = {
 
 /** Réseaux sociaux : renseignez vos liens pour les afficher dans le pied de page. */
 export const SOCIAL_LINKS: { label: string; href: string; icon: "instagram" | "facebook" | "tiktok" | "whatsapp" }[] = [
-  { label: "Instagram", href: "", icon: "instagram" },
-  { label: "Facebook", href: "", icon: "facebook" },
+  { label: "Instagram", href: "https://www.instagram.com/bijouteriehaddaj/", icon: "instagram" },
+  { label: "Facebook", href: "https://www.facebook.com/share/1KXZUkQJgo/", icon: "facebook" },
   { label: "TikTok", href: "", icon: "tiktok" },
   { label: "WhatsApp", href: "https://wa.me/212671882274", icon: "whatsapp" },
 ];
@@ -31,7 +31,7 @@ const STORE_ADDRESS = "Kissariat El Hafari, rue Ssamayrin N° 59 bis, Derb Sulta
 
 export const STORE = {
   tagline: "Bijoux en or au cœur de Derb Sultan",
-  instagramHandle: "",
+  instagramHandle: "@bijouteriehaddaj",
   storeName: "Haddaj Bijouterie",
   addressLine1: "Kissariat El Hafari, rue Ssamayrin N° 59 bis",
   addressLine2: "Derb Sultan, Casablanca",

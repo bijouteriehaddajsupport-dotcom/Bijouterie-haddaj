@@ -96,7 +96,7 @@ export default async function ProductPage({ params }: { params: Params }) {
         </div>
 
         <div className="lg:col-span-5">
-          <div className="lg:sticky lg:top-[136px]">
+          <div className="lg:sticky lg:top-24">
             <Reveal y={16}>
               {product.is_featured && (
                 <p className="mb-3 flex h-8 w-8 items-center justify-center rounded-full bg-or-500 text-bordeaux-950" title="Meilleure vente">

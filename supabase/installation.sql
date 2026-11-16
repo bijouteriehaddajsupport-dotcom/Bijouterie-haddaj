@@ -886,3 +886,24 @@ insert into public.collections (name, slug, description, image_url, is_featured,
   ('Boucles d''oreilles', 'boucles-oreilles', 'Créoles, puces et pendants en or.', 'https://images.unsplash.com/photo-1600721391776-b5cd0e0048f9', true, 4),
   ('Parures', 'parures', 'Parures assorties pour les fêtes et les mariages.', 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed', true, 5)
 on conflict (slug) do nothing;
+
+-- =====================================================================
+--  HADDAJ BIJOUTERIE — Photos du site (Admin → Photos du site)
+--  Réglages de l'accueil : photo + cadrage de chaque emplacement.
+--  À exécuter une fois dans Supabase → SQL Editor (ré-exécutable).
+-- =====================================================================
+
+create table if not exists public.site_settings (
+  key text primary key,
+  value jsonb not null default '{}'::jsonb,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.site_settings enable row level security;
+
+-- Lecture publique (la boutique affiche les photos), modification réservée à l'admin
+drop policy if exists "site_settings_read" on public.site_settings;
+create policy "site_settings_read" on public.site_settings for select using (true);
+drop policy if exists "site_settings_admin" on public.site_settings;
+create policy "site_settings_admin" on public.site_settings
+  for all to authenticated using (public.is_admin()) with check (public.is_admin());

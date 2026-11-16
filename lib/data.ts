@@ -3,6 +3,7 @@ import catalog from "@/data/catalog.json";
 import { unstable_cache } from "next/cache";
 import { isSupabaseConfigured } from "./supabase/config";
 import { createPublicClient } from "./supabase/server";
+import { DEFAULT_HOME_IMAGES, normalizeHomeImages, type HomeImages } from "./site-images";
 import type { Collection, Product } from "./types";
 
 // ---------------------------------------------------------------------
@@ -191,8 +192,17 @@ function sorter(sort?: string) {
 export const CATALOG_TAG = "catalogue";
 const cacheOptions = { tags: [CATALOG_TAG], revalidate: 3600 };
 
-export const getCollections = unstable_cache(fetchCollections, ["getCollections"], cacheOptions);
-export const getCollection = unstable_cache(fetchCollection, ["getCollection"], cacheOptions);
-export const getProducts = unstable_cache(fetchProducts, ["getProducts"], cacheOptions);
-export const getHomeSection = unstable_cache(fetchHomeSection, ["getHomeSection"], cacheOptions);
-export const getProduct = unstable_cache(fetchProduct, ["getProduct"], cacheOptions);
+export const getCollections = unstable_cache(fetchCollections, ["getCollections", "v2"], cacheOptions);
+export const getCollection = unstable_cache(fetchCollection, ["getCollection", "v2"], cacheOptions);
+export const getProducts = unstable_cache(fetchProducts, ["getProducts", "v2"], cacheOptions);
+export const getHomeSection = unstable_cache(fetchHomeSection, ["getHomeSection", "v2"], cacheOptions);
+export const getProduct = unstable_cache(fetchProduct, ["getProduct", "v2"], cacheOptions);
+
+/** Photos de l'accueil réglées dans Admin → Photos du site (valeurs par défaut si rien n'est enregistré). */
+async function fetchHomeImages(): Promise<HomeImages> {
+  if (!isSupabaseConfigured) return DEFAULT_HOME_IMAGES;
+  const { data, error } = await createPublicClient().from("site_settings").select("value").eq("key", "home_images").maybeSingle();
+  if (error || !data) return DEFAULT_HOME_IMAGES;
+  return normalizeHomeImages(data.value);
+}
+export const getHomeImages = unstable_cache(fetchHomeImages, ["getHomeImages", "v2"], cacheOptions);
