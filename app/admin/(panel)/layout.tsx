@@ -27,14 +27,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   ]);
 
   return (
-    <div className="min-h-svh bg-bordeaux-50">
+    <div className="min-h-svh bg-ivoire">
       <div className="lg:pl-64">
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-sable/70 bg-white/85 px-4 backdrop-blur-xl md:px-8">
+        <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-sable bg-white px-4 md:px-8">
           <div className="flex items-center gap-2">
             {/* Barre latérale fixe (desktop) + bouton/tiroir (mobile) */}
             <Sidebar counts={{ pending: pending ?? 0, unread: unread ?? 0, deliveries: upcoming?.length ?? 0 }} email={user.email ?? ""} />
-            <p className="hidden text-[14px] text-taupe sm:block">
-              Bonjour, <span className="font-semibold text-bordeaux-950">{profile.full_name || "Haddaj Bijouterie"}</span>
+            <p className="hidden text-[12px] uppercase tracking-[0.2em] text-taupe sm:block">
+              Bonjour, <span className="text-bordeaux-900">{profile.full_name || "Haddaj Bijouterie"}</span>
             </p>
           </div>
           <NotificationBell initial={(notifications ?? []) as AdminNotification[]} unread={unread ?? 0} />

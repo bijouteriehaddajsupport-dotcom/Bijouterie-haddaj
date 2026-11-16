@@ -18,7 +18,7 @@ export default function AdminLoginPage() {
           <Image src="/logo-light.png" alt="Haddaj Bijouterie" width={469} height={439} className="h-auto w-[130px]" />
           <p className="eyebrow mt-6 text-or-300">Espace d&apos;administration</p>
         </div>
-        <div className="rounded-3xl bg-white p-8 shadow-2xl shadow-bordeaux-950/50 md:p-10">
+        <div className="bg-white p-8 shadow-2xl shadow-bordeaux-950/50 md:p-10">
           <h1 className="font-serif text-[34px] font-light text-bordeaux-900">Connexion</h1>
           <p className="mb-8 mt-2 text-[14px] text-taupe">Accès réservé à l&apos;équipe Haddaj Bijouterie.</p>
           {!isSupabaseConfigured && (

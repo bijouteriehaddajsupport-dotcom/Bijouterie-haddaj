@@ -5,7 +5,7 @@ export function PageHeader({ title, description, children }: { title: string; de
   return (
     <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
       <div>
-        <h1 className="text-[28px] font-bold leading-tight tracking-tight text-bordeaux-950 md:text-[32px]">{title}</h1>
+        <h1 className="font-serif text-[34px] font-light leading-tight text-bordeaux-900 md:text-[40px]">{title}</h1>
         {description && <p className="mt-1 text-[14px] text-taupe">{description}</p>}
       </div>
       {children && <div className="flex flex-wrap items-center gap-3">{children}</div>}
@@ -15,10 +15,10 @@ export function PageHeader({ title, description, children }: { title: string; de
 
 export function Card({ title, action, children, className }: { title?: string; action?: React.ReactNode; children: React.ReactNode; className?: string }) {
   return (
-    <section className={cn("rounded-2xl border border-sable/70 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)]", className)}>
+    <section className={cn("rounded-lg border border-sable bg-white", className)}>
       {(title || action) && (
         <div className="flex items-center justify-between gap-4 border-b border-sable px-5 py-4">
-          {title && <h2 className="text-[16px] font-semibold text-bordeaux-950">{title}</h2>}
+          {title && <h2 className="font-serif text-xl text-bordeaux-900">{title}</h2>}
           {action}
         </div>
       )}
@@ -38,14 +38,14 @@ type StatCardProps = {
 
 export function StatCard({ label, value, hint, delta, icon: Icon, highlight }: StatCardProps) {
   return (
-    <div className={cn("relative overflow-hidden rounded-2xl border p-5", highlight ? "border-bordeaux-950 bg-bordeaux-950 text-white" : "border-sable/70 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)]")}>
+    <div className={cn("relative overflow-hidden rounded-lg border p-5", highlight ? "border-bordeaux-900 bg-bordeaux-900 text-ivoire" : "border-sable bg-white")}>
       <div className="flex items-start justify-between gap-3">
-        <p className={cn("text-[13px] font-medium", highlight ? "text-white/70" : "text-taupe")}>{label}</p>
+        <p className={cn("text-[11px] font-medium uppercase tracking-[0.18em]", highlight ? "text-or-300" : "text-taupe")}>{label}</p>
         <span className={cn("flex h-9 w-9 items-center justify-center rounded-full", highlight ? "bg-white/10 text-or-300" : "bg-champagne text-or-700")}>
           <Icon className="h-[18px] w-[18px]" strokeWidth={1.5} />
         </span>
       </div>
-      <p className={cn("mt-3 text-[30px] font-bold leading-none tracking-tight tabular-nums", highlight ? "text-white" : "text-bordeaux-950")}>{value}</p>
+      <p className={cn("mt-3 font-serif text-[32px] leading-none tabular-nums", highlight ? "text-ivoire" : "text-bordeaux-900")}>{value}</p>
       <div className="mt-3 flex items-center gap-2 text-[12px]">
         {delta != null && Number.isFinite(delta) && (
           <span

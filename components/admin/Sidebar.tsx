@@ -36,14 +36,15 @@ function NavList({ counts, onNavigate }: { counts: Counts; onNavigate?: () => vo
               onClick={onNavigate}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "group relative flex min-h-[44px] items-center gap-3 rounded-xl px-3 text-[14px] font-medium transition-colors",
-                active ? "bg-white text-bordeaux-950 shadow-sm" : "text-white/65 hover:bg-white/[0.07] hover:text-white"
+                "group relative flex min-h-[44px] items-center gap-3 rounded-md px-3 text-[13px] transition-colors",
+                active ? "bg-or-500/15 text-or-200" : "text-or-100/70 hover:bg-white/5 hover:text-or-100"
               )}
             >
+              {active && <span className="absolute inset-y-2 left-0 w-0.5 rounded-full bg-or-400" aria-hidden />}
               <Icon className="h-[18px] w-[18px]" strokeWidth={1.5} />
               <span className="flex-1">{label}</span>
               {n > 0 && (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-or-400 px-1.5 text-[10px] font-bold text-bordeaux-950">
+                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-or-500 px-1.5 text-[10px] font-semibold text-bordeaux-950">
                   {n}
                 </span>
               )}
@@ -61,23 +62,23 @@ function SidebarBody({ counts, email, onNavigate }: { counts: Counts; email: str
       <div className="flex items-center gap-3 px-5 py-6">
         <Image src="/logo-mark.png" alt="" width={382} height={264} className="h-8 w-auto invert" />
         <div className="leading-tight">
-          <p className="font-serif text-[17px] tracking-[0.2em] text-white">HADDAJ</p>
-          <p className="text-[11px] text-white/50">Espace admin</p>
+          <p className="font-serif text-xl text-ivoire">Haddaj Bijouterie</p>
+          <p className="text-[10px] uppercase tracking-[0.25em] text-or-400">Administration</p>
         </div>
       </div>
       <nav aria-label="Administration" className="flex-1 overflow-y-auto px-3 py-2">
         <NavList counts={counts} onNavigate={onNavigate} />
       </nav>
       <div className="space-y-1 border-t border-white/10 px-3 py-4">
-        <Link href="/" target="_blank" className="flex min-h-[44px] items-center gap-3 rounded-xl px-3 text-[13px] text-white/60 hover:bg-white/[0.07] hover:text-white">
+        <Link href="/" target="_blank" className="flex min-h-[44px] items-center gap-3 rounded-md px-3 text-[13px] text-or-100/70 hover:bg-white/5 hover:text-or-100">
           <ExternalLink className="h-[18px] w-[18px]" strokeWidth={1.5} /> Voir la boutique
         </Link>
         <form action={signOutAdmin}>
-          <button type="submit" className="flex min-h-[44px] w-full cursor-pointer items-center gap-3 rounded-xl px-3 text-[13px] text-white/60 hover:bg-white/[0.07] hover:text-white">
+          <button type="submit" className="flex min-h-[44px] w-full cursor-pointer items-center gap-3 rounded-md px-3 text-[13px] text-or-100/70 hover:bg-white/5 hover:text-or-100">
             <LogOut className="h-[18px] w-[18px]" strokeWidth={1.5} /> Se déconnecter
           </button>
         </form>
-        <p className="truncate px-3 pt-2 text-[11px] text-white/35">{email}</p>
+        <p className="truncate px-3 pt-2 text-[11px] text-or-100/40">{email}</p>
       </div>
     </div>
   );
@@ -90,7 +91,7 @@ export function Sidebar({ counts, email }: { counts: Counts; email: string }) {
 
   return (
     <>
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 bg-bordeaux-950 lg:block">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 bg-bordeaux-900 lg:block">
         <SidebarBody counts={counts} email={email} />
       </aside>
 
@@ -112,7 +113,7 @@ export function Sidebar({ counts, email }: { counts: Counts; email: string }) {
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="absolute inset-y-0 left-0 w-72 bg-bordeaux-950"
+              className="absolute inset-y-0 left-0 w-72 bg-bordeaux-900"
             >
               <button type="button" onClick={() => setOpen(false)} aria-label="Fermer" className="absolute right-3 top-6 flex h-11 w-11 cursor-pointer items-center justify-center text-or-200">
                 <X className="h-5 w-5" />
