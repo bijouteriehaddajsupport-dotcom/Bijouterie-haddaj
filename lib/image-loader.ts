@@ -2,7 +2,11 @@
 
 type LoaderArgs = { src: string; width: number; quality?: number };
 
-/** Photos du stockage Supabase : passées par le redimensionnement automatique (WebP léger, plan Pro). */
+/**
+ * Photos du stockage Supabase : redimensionnement automatique (WebP léger) seulement si le projet
+ * Supabase est en plan Pro et que NEXT_PUBLIC_SUPABASE_IMAGE_TRANSFORM=1 ; sinon l'image originale
+ * est servie (elle est déjà compressée à l'envoi dans l'admin).
+ */
 const SUPABASE_PUBLIC = "/storage/v1/object/public/";
 const SUPABASE_RENDER = "/storage/v1/render/image/public/";
 
@@ -17,6 +21,7 @@ export default function imageLoader({ src, width, quality }: LoaderArgs) {
   }
   // Ex. 2,2 Mo en PNG → ~10 Ko en WebP pour une vignette : divise la bande passante Supabase
   if (src.includes(".supabase.co" + SUPABASE_PUBLIC)) {
+    if (process.env.NEXT_PUBLIC_SUPABASE_IMAGE_TRANSFORM !== "1") return src;
     const url = new URL(src.replace(SUPABASE_PUBLIC, SUPABASE_RENDER));
     url.searchParams.set("width", String(Math.min(width, 2000)));
     url.searchParams.set("quality", String(quality || 70));
