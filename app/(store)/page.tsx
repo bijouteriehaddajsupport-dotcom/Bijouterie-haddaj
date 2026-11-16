@@ -7,7 +7,7 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { WhatsAppIcon } from "@/components/ui/SocialIcons";
 import { SOCIAL_LINKS, STORE } from "@/lib/constants";
 import { getBestSellers, getCollections, getHomeImages, getNewArrivals } from "@/lib/data";
-import { focus } from "@/lib/site-images";
+import { imageStyle } from "@/lib/site-images";
 
 export const revalidate = 3600;
 
@@ -62,16 +62,16 @@ export default async function HomePage() {
 
         <RevealGroup className="grid h-[440px] grid-cols-6 grid-rows-6 gap-3 sm:h-[540px] lg:col-span-7 lg:h-[600px]">
           <RevealItem className="relative col-span-4 row-span-6 overflow-hidden rounded-3xl bg-bordeaux-50">
-            <Image src={h1.url} alt="Bijou en or porté" fill priority sizes="(min-width:1024px) 38vw, 66vw" className="object-cover" style={{ objectPosition: focus(h1) }} />
+            <Image src={h1.url} alt="Bijou en or porté" fill priority sizes="(min-width:1024px) 38vw, 66vw" className="object-cover" style={imageStyle(h1)} />
           </RevealItem>
           <RevealItem className="relative col-span-2 row-span-2 overflow-hidden rounded-3xl bg-bordeaux-50">
-            <Image src={h2.url} alt="Bijou en or" fill sizes="(min-width:1024px) 19vw, 33vw" className="object-cover" style={{ objectPosition: focus(h2) }} />
+            <Image src={h2.url} alt="Bijou en or" fill sizes="(min-width:1024px) 19vw, 33vw" className="object-cover" style={imageStyle(h2)} />
           </RevealItem>
           <RevealItem className="relative col-span-2 row-span-2 overflow-hidden rounded-3xl bg-bordeaux-50">
-            <Image src={h3.url} alt="Bijou en or" fill sizes="(min-width:1024px) 19vw, 33vw" className="object-cover" style={{ objectPosition: focus(h3) }} />
+            <Image src={h3.url} alt="Bijou en or" fill sizes="(min-width:1024px) 19vw, 33vw" className="object-cover" style={imageStyle(h3)} />
           </RevealItem>
           <RevealItem className="relative col-span-2 row-span-2 overflow-hidden rounded-3xl bg-bordeaux-900">
-            <Image src={h4.url} alt="Nouveautés" fill sizes="(min-width:1024px) 19vw, 33vw" className="object-cover opacity-80" style={{ objectPosition: focus(h4) }} />
+            <Image src={h4.url} alt="Nouveautés" fill sizes="(min-width:1024px) 19vw, 33vw" className="object-cover opacity-80" style={imageStyle(h4)} />
             <Link href="/boutique?tri=nouveautes" className="absolute inset-0 flex items-end p-4 text-[13px] font-semibold text-white">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 backdrop-blur">
                 Nouveautés <ArrowRight className="h-3.5 w-3.5" />
@@ -136,7 +136,7 @@ export default async function HomePage() {
       {/* 4. Bandeau noir : nos engagements */}
       <section className="container">
         <div className="relative overflow-hidden rounded-[2rem] bg-bordeaux-950 text-white">
-          <Image src={editorial.url} alt="" fill sizes="100vw" className="object-cover opacity-25" style={{ objectPosition: focus(editorial) }} />
+          <Image src={editorial.url} alt="" fill sizes="100vw" className="object-cover opacity-25" style={imageStyle(editorial)} />
           <div className="relative grid gap-10 p-8 md:p-14 lg:grid-cols-12 lg:items-center">
             <div className="lg:col-span-4">
               <p className="eyebrow text-or-300">Haddaj Bijouterie</p>

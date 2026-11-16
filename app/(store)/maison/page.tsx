@@ -7,7 +7,7 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { WhatsAppIcon } from "@/components/ui/SocialIcons";
 import { SOCIAL_LINKS, STORE } from "@/lib/constants";
 import { getHomeImages } from "@/lib/data";
-import { focus } from "@/lib/site-images";
+import { imageStyle } from "@/lib/site-images";
 
 export const metadata: Metadata = {
   title: "Notre boutique",
@@ -54,7 +54,7 @@ export default async function MaisonPage() {
         </Reveal>
         <Reveal delay={0.1} className="relative">
           <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-bordeaux-50">
-            <Image src={editorial.url} alt="Bijou en or porté" fill priority sizes="(min-width:1024px) 50vw, 100vw" className="object-cover" style={{ objectPosition: focus(editorial) }} />
+            <Image src={editorial.url} alt="Bijou en or porté" fill priority sizes="(min-width:1024px) 50vw, 100vw" className="object-cover" style={imageStyle(editorial)} />
           </div>
           <div className="absolute -bottom-6 left-6 rounded-2xl bg-white p-4 shadow-xl shadow-black/10">
             <LogoFull className="w-[84px]" />

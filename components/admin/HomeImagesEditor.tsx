@@ -1,11 +1,12 @@
 "use client";
 
-import { Crosshair, ImagePlus, LoaderCircle, Move, RefreshCw, Save } from "lucide-react";
+import { Crop, ImagePlus, LoaderCircle, Move, RefreshCw, Save } from "lucide-react";
 import { useRef, useState, useTransition } from "react";
 import { refreshStoreNow, saveHomeImages } from "@/app/admin/actions";
 import { compressImage } from "@/lib/compress-image";
-import { focus, IMAGE_SLOTS, type Frame, type HomeImages, type SiteImage, type SlotKey } from "@/lib/site-images";
+import { IMAGE_SLOTS, imageStyle, type Frame, type HomeImages, type SiteImage, type SlotKey } from "@/lib/site-images";
 import { createClient } from "@/lib/supabase/client";
+import { CropModal } from "./CropModal";
 import { Card } from "./ui";
 
 const MAX_MB = 15;
@@ -68,6 +69,7 @@ function SlotCard({ slotKey, title, where, frames, image, onChange }: { slotKey:
   const input = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [cropping, setCropping] = useState(false);
 
   const upload = async (file?: File) => {
     setError("");
@@ -82,7 +84,8 @@ function SlotCard({ slotKey, title, where, frames, image, onChange }: { slotKey:
       const supabase = createClient();
       const { error: upErr } = await supabase.storage.from("images").upload(path, light, { cacheControl: "31536000", contentType: light.type });
       if (upErr) throw upErr;
-      onChange({ url: supabase.storage.from("images").getPublicUrl(path).data.publicUrl, x: 50, y: 50 });
+      onChange({ url: supabase.storage.from("images").getPublicUrl(path).data.publicUrl, x: 50, y: 50, z: 1 });
+      setCropping(true); // comme sur WhatsApp : on recadre juste après avoir choisi la photo
     } catch (e) {
       setError(`Échec du téléversement : ${e instanceof Error ? e.message : "erreur inconnue"}`);
     } finally {
@@ -95,8 +98,8 @@ function SlotCard({ slotKey, title, where, frames, image, onChange }: { slotKey:
       title={title}
       action={
         <div className="flex flex-wrap gap-2">
-          <button type="button" onClick={() => onChange({ ...image, x: 50, y: 50 })} className="inline-flex min-h-[40px] items-center gap-2 rounded-md px-3 text-[13px] text-bordeaux-900 hover:bg-champagne">
-            <Crosshair className="h-4 w-4" /> Recentrer
+          <button type="button" onClick={() => setCropping(true)} className="inline-flex min-h-[40px] items-center gap-2 rounded-md border border-sable px-3 text-[13px] text-bordeaux-900 hover:bg-champagne">
+            <Crop className="h-4 w-4" /> Recadrer
           </button>
           <button type="button" onClick={() => input.current?.click()} disabled={uploading} className="inline-flex min-h-[40px] items-center gap-2 rounded-md bg-bordeaux-900 px-4 text-[13px] text-white hover:bg-bordeaux-700 disabled:opacity-60">
             {uploading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />} Changer la photo
@@ -107,7 +110,7 @@ function SlotCard({ slotKey, title, where, frames, image, onChange }: { slotKey:
     >
       <p className="text-[13px] text-taupe">{where}</p>
       <p className="mt-1 flex items-center gap-1.5 text-[12px] text-or-700">
-        <Move className="h-3.5 w-3.5" /> Faites glisser la photo dans un cadre pour choisir la partie visible.
+        <Move className="h-3.5 w-3.5" /> Cliquez sur « Recadrer » pour zoomer et positionner la photo (ou faites-la glisser directement dans un cadre).
       </p>
       {error && (
         <p role="alert" className="mt-2 text-[13px] text-bordeaux-600">
@@ -119,6 +122,18 @@ function SlotCard({ slotKey, title, where, frames, image, onChange }: { slotKey:
           <Preview key={f.label} frame={f} image={image} onMove={(x, y) => onChange({ ...image, x, y })} />
         ))}
       </div>
+      {cropping && (
+        <CropModal
+          image={image}
+          frames={frames}
+          title={title}
+          onClose={() => setCropping(false)}
+          onApply={(img) => {
+            onChange(img);
+            setCropping(false);
+          }}
+        />
+      )}
     </Card>
   );
 }
@@ -144,18 +159,18 @@ function Preview({ frame, image, onMove }: { frame: Frame; image: SiteImage; onM
           const d = drag.current;
           if (!d) return;
           // Glisser vers la droite montre la partie gauche de la photo (le point de cadrage recule)
-          const x = Math.min(100, Math.max(0, d.x - ((e.clientX - d.px) / w) * 100));
-          const y = Math.min(100, Math.max(0, d.y - ((e.clientY - d.py) / h) * 100));
+          const x = Math.min(100, Math.max(0, d.x - ((e.clientX - d.px) / w) * (100 / image.z)));
+          const y = Math.min(100, Math.max(0, d.y - ((e.clientY - d.py) / h) * (100 / image.z)));
           onMove(Math.round(x), Math.round(y));
         }}
         onPointerUp={() => (drag.current = null)}
         onPointerCancel={() => (drag.current = null)}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={image.url} alt="" draggable={false} className="pointer-events-none h-full w-full object-cover" style={{ objectPosition: focus(image) }} />
+        <img src={image.url} alt="" draggable={false} className="pointer-events-none h-full w-full object-cover" style={imageStyle(image)} />
       </div>
       <figcaption className="mt-2 text-[12px] text-taupe">
-        {frame.label} · {frame.w}×{frame.h}
+        {frame.label} · {frame.w}×{frame.h}{image.z > 1 ? ` · zoom ${Math.round(image.z * 100)} %` : ""}
       </figcaption>
     </figure>
   );

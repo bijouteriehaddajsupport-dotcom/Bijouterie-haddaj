@@ -1,7 +1,11 @@
+import type { CSSProperties } from "react";
 import { EDITORIAL_IMAGES } from "./constants";
 
-/** Une photo du site : son adresse + le point à garder au centre du cadrage (en %). */
-export type SiteImage = { url: string; x: number; y: number };
+/** Une photo du site : son adresse, le point de cadrage (en %) et le zoom (1 = photo entière dans le cadre, jusqu'à 3). */
+export type SiteImage = { url: string; x: number; y: number; z: number };
+
+export const MIN_ZOOM = 1;
+export const MAX_ZOOM = 3;
 
 export type SlotKey = "hero1" | "hero2" | "hero3" | "hero4" | "editorial";
 export type HomeImages = Record<SlotKey, SiteImage>;
@@ -63,11 +67,11 @@ export const IMAGE_SLOTS: { key: SlotKey; title: string; where: string; frames: 
 ];
 
 export const DEFAULT_HOME_IMAGES: HomeImages = {
-  hero1: { url: EDITORIAL_IMAGES.hero[0], x: 50, y: 50 },
-  hero2: { url: EDITORIAL_IMAGES.hero[1], x: 50, y: 50 },
-  hero3: { url: EDITORIAL_IMAGES.hero[2], x: 50, y: 50 },
-  hero4: { url: EDITORIAL_IMAGES.hero[3], x: 50, y: 50 },
-  editorial: { url: EDITORIAL_IMAGES.editorial, x: 50, y: 50 },
+  hero1: { url: EDITORIAL_IMAGES.hero[0], x: 50, y: 50, z: 1 },
+  hero2: { url: EDITORIAL_IMAGES.hero[1], x: 50, y: 50, z: 1 },
+  hero3: { url: EDITORIAL_IMAGES.hero[2], x: 50, y: 50, z: 1 },
+  hero4: { url: EDITORIAL_IMAGES.hero[3], x: 50, y: 50, z: 1 },
+  editorial: { url: EDITORIAL_IMAGES.editorial, x: 50, y: 50, z: 1 },
 };
 
 const clamp = (n: unknown) => (typeof n === "number" && Number.isFinite(n) ? Math.min(100, Math.max(0, n)) : 50);
@@ -79,7 +83,8 @@ export function normalizeHomeImages(value: unknown): HomeImages {
   for (const { key } of IMAGE_SLOTS) {
     const s = v[key];
     if (s && typeof s.url === "string" && (s.url.startsWith("https://") || s.url.startsWith("/images/"))) {
-      out[key] = { url: s.url, x: clamp(s.x), y: clamp(s.y) };
+      const z = typeof s.z === "number" && Number.isFinite(s.z) ? Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, s.z)) : 1;
+      out[key] = { url: s.url, x: clamp(s.x), y: clamp(s.y), z };
     }
   }
   return out;
@@ -87,3 +92,14 @@ export function normalizeHomeImages(value: unknown): HomeImages {
 
 /** Valeur CSS object-position du cadrage choisi. */
 export const focus = (img: SiteImage) => `${img.x}% ${img.y}%`;
+
+/**
+ * Style à poser sur l'image (dans un cadre overflow-hidden) : cadrage + zoom.
+ * Le zoom part du point de cadrage, la photo couvre donc toujours tout le cadre.
+ * Utilisé à l'identique dans l'admin et sur la boutique : l'aperçu est exact.
+ */
+export const imageStyle = (img: SiteImage): CSSProperties => ({
+  objectPosition: focus(img),
+  transform: img.z > 1 ? `scale(${img.z})` : undefined,
+  transformOrigin: focus(img),
+});
